@@ -1,6 +1,9 @@
-const forge = require('mappersmith').default
-const authenticationMiddleware = require('mappersmith/middlewares/basic-auth').default
-const resources = require('./resources')
+import forge from 'mappersmith'
+import authenticationMiddleware from 'mappersmith/middlewares/basic-auth'
+import {
+  invoker,
+} from 'ramda'
+import { resources } from './resources'
 
 const headersMiddleware = headers => () => ({
   request (request) {
@@ -8,9 +11,14 @@ const headersMiddleware = headers => () => ({
       headers,
     })
   },
+  response (next) {
+    return next()
+      .then(invoker(0, 'data'))
+      .catch(err => Promise.reject(err.data()))
+  },
 })
 
-const getClient = ({ username, token }) => {
+export const getClient = ({ username, token }) => {
   const middlewares = [
     headersMiddleware({
       Accept: 'application/vnd.github.inertia-preview+json',
@@ -28,5 +36,3 @@ const getClient = ({ username, token }) => {
     resources,
   })
 }
-
-exports.getClient = getClient
