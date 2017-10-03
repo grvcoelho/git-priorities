@@ -1,4 +1,4 @@
-const resources = {
+export const resources = {
   projects: {
     all: { path: 'repos/{repo}/projects' },
     get: { path: 'projects/{id}' },
@@ -16,5 +16,3 @@ const resources = {
     get: { path: '/repos/{repo}/issues/{id}' },
   },
 }
-
-module.exports = resources
