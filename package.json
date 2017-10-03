@@ -1,5 +1,5 @@
 {
-  "name": "git-priorities",
+  "name": "venkman",
   "version": "1.0.0",
   "description": ":construction: Prioritize github issues based on complexity, business and urgency.",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/grvcoelho/git-priorities.git"
+    "url": "git+https://github.com/grvcoelho/venkman.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/grvcoelho/git-priorities/issues"
+    "url": "https://github.com/grvcoelho/venkman/issues"
   },
-  "homepage": "https://github.com/grvcoelho/git-priorities#readme",
+  "homepage": "https://github.com/grvcoelho/venkman#readme",
   "devDependencies": {
     "eslint": "4.8.0",
     "eslint-config-pagarme-base": "2.0.0",
