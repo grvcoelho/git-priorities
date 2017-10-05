@@ -10,13 +10,16 @@ import {
   map,
   merge,
   mergeAll,
+  negate,
   objOf,
   pipe,
   prop,
+  sortBy,
   split,
   trim,
 } from 'ramda'
 import { getClient } from '../api'
+import IssuesTable from '../components/IssuesTable'
 
 export default class extends Component {
   constructor (props) {
@@ -25,10 +28,15 @@ export default class extends Component {
     this.signInWithGithub = this.signInWithGithub.bind(this)
     this.fetchData = this.fetchData.bind(this)
 
+    const { repo, column_id } = props.url.query
+
     this.state = {
       user: null,
       auth: {},
-      data: {},
+      data: {
+        repo,
+        column_id,
+      },
     }
   }
 
@@ -53,7 +61,9 @@ export default class extends Component {
       })
   }
 
-  async fetchData ({ repo }) {
+  async fetchData () {
+    const { repo, column_id } = this.state.data
+
     const client = getClient({
       username: this.state.user.email,
       token: this.state.auth.accessToken,
@@ -104,9 +114,14 @@ export default class extends Component {
     const calculateCoefficient = ({ urgency, complexity, business }) =>
       Math.round(((urgency * 0.25) + (business * 0.75)) * 10 / complexity)
 
-    const column = { id: 1420864 }
+    const sortByCoefficient = sortBy(
+      pipe(
+        prop('coefficient'),
+        negate
+      )
+    )
 
-    const cards = await Promise.resolve({ column_id: column.id })
+    const cards = await Promise.resolve({ column_id })
       .then(client.cards.all)
 
     const issues = await Promise.resolve(cards)
@@ -122,11 +137,12 @@ export default class extends Component {
           { coefficient },
         ])
       })
+      .then(sortByCoefficient)
 
-    this.setState(() => ({
-      data: {
+    this.setState(({ data }) => ({
+      data: merge(data, {
         issues,
-      },
+      })
     }))
   }
 
@@ -156,22 +172,31 @@ export default class extends Component {
   }
 
   render () {
+    const { data } = this.state
+
     return (
-      <div>
+      <div className="container">
+        <style jsx>{`
+          .container {
+            max-width: 980px;
+          }
+        `}</style>
+
         {!this.state.user && (
           <button onClick={this.signInWithGithub}>Sign in with Github</button>
         )}
 
         {this.state.user && (
           <div>
-            <button onClick={() => this.fetchData({ repo: 'pagarme/ghostbusters' })}>Fetch data!</button>
-            <pre>
-              Hello World {JSON.stringify(this.props, null, 2)}
-            </pre>
+            <h1>{this.state.data.repo}</h1>
+            <button onClick={this.fetchData}>Fetch data!</button>
+
+            {data.issues && data.issues.length && (
+              <IssuesTable issues={data.issues} />
+            )}
           </div>
         )}
       </div>
     )
   }
 }
-
