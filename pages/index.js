@@ -10,9 +10,11 @@ import {
   map,
   merge,
   mergeAll,
+  negate,
   objOf,
   pipe,
   prop,
+  sortBy,
   split,
   trim,
 } from 'ramda'
@@ -104,7 +106,14 @@ export default class extends Component {
     const calculateCoefficient = ({ urgency, complexity, business }) =>
       Math.round(((urgency * 0.25) + (business * 0.75)) * 10 / complexity)
 
-    const column = { id: 1420864 }
+    const sortByCoefficient = sortBy(
+      pipe(
+        prop('coefficient'),
+        negate
+      )
+    )
+
+    const column = { id: 1424327 }
 
     const cards = await Promise.resolve({ column_id: column.id })
       .then(client.cards.all)
@@ -122,6 +131,7 @@ export default class extends Component {
           { coefficient },
         ])
       })
+      .then(sortByCoefficient)
 
     this.setState(() => ({
       data: {
