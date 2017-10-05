@@ -8,7 +8,7 @@ export const resources = {
     get: { path: '/projects/columns/{id}' },
   },
   cards: {
-    all: { path: '/projects/columns/{column_id}/cards' },
+    all: { path: '/projects/columns/{column_id}/cards?per_page={per_page}', params: { per_page: 200 } },
     get: { path: '/projects/columns/cards/{id}' },
   },
   issues: {
