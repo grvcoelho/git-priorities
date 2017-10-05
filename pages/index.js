@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import Promise from 'bluebird'
 import firebase from 'firebase'
+import Head from 'next/head'
 import {
   drop,
   dropLast,
@@ -175,27 +176,45 @@ export default class extends Component {
     const { data } = this.state
 
     return (
-      <div className="container">
-        <style jsx>{`
-          .container {
-            max-width: 980px;
+      <div>
+        <Head>
+          <title>Venkman Coefficient</title>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.3/css/bulma.min.css" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+        </Head>
+
+        <style global jsx>{`
+          html {
+            font-family: 'Roboto', sans-serif;
           }
+
+          .container {
+            margin-top: 40px;
+          }
+
         `}</style>
 
-        {!this.state.user && (
-          <button onClick={this.signInWithGithub}>Sign in with Github</button>
-        )}
+        <div className="container is-widescreen">
+          {!this.state.user && (
+            <button className="button" onClick={this.signInWithGithub}>
+              Sign in with Github
+            </button>
+          )}
 
-        {this.state.user && (
-          <div>
-            <h1>{this.state.data.repo}</h1>
-            <button onClick={this.fetchData}>Fetch data!</button>
+          {this.state.user && (
+            <div>
+              <h1 className="title">{this.state.data.repo}</h1>
+              <button className="button" onClick={this.fetchData}>
+                Fetch data!
+              </button>
 
-            {data.issues && data.issues.length && (
-              <IssuesTable issues={data.issues} />
-            )}
-          </div>
-        )}
+              {data.issues && data.issues.length && (
+                <IssuesTable issues={data.issues} />
+              )}
+            </div>
+          )}
+        </div>
       </div>
     )
   }

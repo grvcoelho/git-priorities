@@ -1,5 +1,18 @@
 export default ({ issues }) => (
-  <table>
+  <table className="table is-bordered is-striped">
+    <style jsx>{`
+      table {
+        margin-top: 40px;
+      }
+
+      a {
+        color: #2f4094;
+      }
+
+      .highlight {
+        font-weight: 900;
+      }
+    `}</style>
     <thead>
       <tr>
         <th>Issue</th>
@@ -17,7 +30,7 @@ export default ({ issues }) => (
           <td>{issue.metadata.urgency}</td>
           <td>{issue.metadata.business}</td>
           <td>{issue.metadata.complexity}</td>
-          <td>{issue.coefficient}</td>
+          <td className="highlight">{issue.coefficient}</td>
         </tr>
       ))}
     </tbody>
