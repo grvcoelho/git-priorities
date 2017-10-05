@@ -28,10 +28,15 @@ export default class extends Component {
     this.signInWithGithub = this.signInWithGithub.bind(this)
     this.fetchData = this.fetchData.bind(this)
 
+    const { repo, column_id } = props.url.query
+
     this.state = {
       user: null,
       auth: {},
-      data: {},
+      data: {
+        repo,
+        column_id,
+      },
     }
   }
 
@@ -56,7 +61,9 @@ export default class extends Component {
       })
   }
 
-  async fetchData ({ repo }) {
+  async fetchData () {
+    const { repo, column_id } = this.state.data
+
     const client = getClient({
       username: this.state.user.email,
       token: this.state.auth.accessToken,
@@ -114,9 +121,7 @@ export default class extends Component {
       )
     )
 
-    const column = { id: 1424327 }
-
-    const cards = await Promise.resolve({ column_id: column.id })
+    const cards = await Promise.resolve({ column_id })
       .then(client.cards.all)
 
     const issues = await Promise.resolve(cards)
@@ -134,10 +139,10 @@ export default class extends Component {
       })
       .then(sortByCoefficient)
 
-    this.setState(() => ({
-      data: {
+    this.setState(({ data }) => ({
+      data: merge(data, {
         issues,
-      },
+      })
     }))
   }
 
@@ -183,7 +188,8 @@ export default class extends Component {
 
         {this.state.user && (
           <div>
-            <button onClick={() => this.fetchData({ repo: 'pagarme/ghostbusters' })}>Fetch data!</button>
+            <h1>{this.state.data.repo}</h1>
+            <button onClick={this.fetchData}>Fetch data!</button>
 
             {data.issues && data.issues.length && (
               <IssuesTable issues={data.issues} />
