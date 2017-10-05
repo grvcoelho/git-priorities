@@ -19,6 +19,7 @@ import {
   trim,
 } from 'ramda'
 import { getClient } from '../api'
+import IssuesTable from '../components/IssuesTable'
 
 export default class extends Component {
   constructor (props) {
@@ -166,8 +167,16 @@ export default class extends Component {
   }
 
   render () {
+    const { data } = this.state
+
     return (
-      <div>
+      <div className="container">
+        <style jsx>{`
+          .container {
+            max-width: 980px;
+          }
+        `}</style>
+
         {!this.state.user && (
           <button onClick={this.signInWithGithub}>Sign in with Github</button>
         )}
@@ -175,13 +184,13 @@ export default class extends Component {
         {this.state.user && (
           <div>
             <button onClick={() => this.fetchData({ repo: 'pagarme/ghostbusters' })}>Fetch data!</button>
-            <pre>
-              Hello World {JSON.stringify(this.props, null, 2)}
-            </pre>
+
+            {data.issues && data.issues.length && (
+              <IssuesTable issues={data.issues} />
+            )}
           </div>
         )}
       </div>
     )
   }
 }
-
