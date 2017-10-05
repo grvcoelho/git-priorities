@@ -22,7 +22,7 @@ export const getClient = ({ username, token }) => {
   const middlewares = [
     headersMiddleware({
       Accept: 'application/vnd.github.inertia-preview+json',
-      'User-Agent': 'setlight',
+      'User-Agent': 'venkman',
     }),
     authenticationMiddleware({
       username,
