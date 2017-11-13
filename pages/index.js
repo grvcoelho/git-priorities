@@ -113,7 +113,7 @@ export default class extends Component {
     )
 
     const calculateCoefficient = ({ urgency, complexity, business }) =>
-      Math.round(((urgency * 0.25) + (business * 0.75)) * 10 / complexity)
+      Math.round(((urgency * 100) + business) + (business - complexity) + 21)
 
     const sortByCoefficient = sortBy(
       pipe(
